@@ -18,8 +18,8 @@
                         <div class="sm:-mx-6 lg:-mx-8">
                             <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
                                 <div class=" ">
-                                    <div class='bg-blue-5 rounded-lg shadow-md p-4 py-8 '>
-                                        <div class='flex items-center w-1/3 justify-between'>
+                                    <div class='bg-slate-200 rounded-lg w-1/3 shadow-md p-4 py-8 '>
+                                        <div class='flex items-center  justify-between'>
                                             <div class='text-gray-600'>Total Employees</div>
                                             <div class=' text-2xl font-bold text-gray-900'>{{$total_employees}}</div>
                                         </div>

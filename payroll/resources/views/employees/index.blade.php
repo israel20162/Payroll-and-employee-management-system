@@ -19,18 +19,32 @@
         </x-slot>
 
         <x-slot name="slot">
-            <div class='bg-gray-60 mt-4 border-none  ' style='border:none;background-color:whit;max-width:100%;'>
+            <div class='bg-gray-60 mt-4 border-none  ' style='border:none;background-color:white;max-width:100%;'>
+
                 <form action='/search'method='POST' class='bg-transparent' role='search'>
                     @csrf
-                    <div class=' items-center justify-end flex gap-1 bg-inherit ' style='background-color:transparent'>
-                        <input type='text' class='form-control rounded form-input  m-2 px-2' name='q'
-                            placeholder='Search Employees' />
-                        <span class='input-group-btn'>
-                            <button type='submit'
-                                class='bg-blue-500 text-sm hover:bg-blue-600 text-white font-bold py-2 px-4 rounded'>
-                                Search
-                            </button>
-                        </span>
+                    <div class=' items-center justify-between flex gap-1 bg-inherit '
+                        style='background-color:transparent'>
+                        <div class="flex items-center " style="align-items: center;margin: 0">
+                            <a href={{route('employees.create')}}><button
+                                    class="text-center rounded bg-green-500 my-auto py-2 px-4 ml-3 "
+                                    style="margin-top: "
+                                    type="button">
+                                    <span class="text-extrabold text-xl text-center">+</span> Add new
+                                </button></a>
+
+                        </div>
+                        <div>
+                            <input type='text' class='form-control rounded form-input  m-2 px-2' name='q'
+                                placeholder='Search Employees' />
+                            <span class='input-group-btn'>
+                                <button type='submit'
+                                    class='bg-blue-500 text-sm hover:bg-blue-600 text-white font-bold py-2 px-4 rounded'>
+                                    Search
+                                </button>
+                            </span>
+                        </div>
+
                     </div>
                 </form>
 
