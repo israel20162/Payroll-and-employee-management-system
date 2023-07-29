@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DepartmentsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,6 +27,13 @@ Route::controller(DashboardController::class)->group(function () {
     Route::get('/dashboard', 'index')->middleware(['auth'])->name('dashboard');
     Route::post('/orders', 'store');
 });
+
+Route::controller(DepartmentsController::class)->group(function () {
+    Route::get('/departments', 'index')->name('departments');
+    Route::any('/import', 'importExcel')->name('import.excel');
+
+    Route::post('/orders', 'store');
+});
 Route::controller(EmployeeController::class)->group(function () {
     Route::get('/employees', 'index')->middleware(['auth'])->name('employees');
     Route::any('/search','search')->name('search');
@@ -35,7 +43,7 @@ Route::controller(EmployeeController::class)->group(function () {
 
 
 
-
+    Route::get('/export', 'exportEmployeesToExcel');
 
     Route::post('/orders', 'store');
     Route::any('/employee/login', 'login')->name('employee.login');
@@ -54,8 +62,9 @@ Route::controller(PaymentsController::class)->group(function () {
 
     Route::get('/employees/payments', 'viewEmployeePayments')->name('employees.payments');
     Route::get('/employees/payments/{id?}', 'viewEmployeePayment')->name('employees.payment.view');
+    Route::post('/employees/payments/{id?}/{action?}','setPaymentStatus')->name('employees.payment.status');
     Route::get('/employees/payment/create', 'createEmployeePayments')->name('employees.payments.create');
-    Route::get('/export','export');
+    Route::get('/export/payments/{month?}/{year?}', 'exportPaymentsToExcel');
     Route::get('/employees/payments/create/{employee?}', 'createEmployeePayment')->name('employees.payment.create');
     Route::post('/employees/payments/generate-payslip/{employee?}', 'storeEmployeePayment')->name('employees.payment.store');
 });

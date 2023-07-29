@@ -2,44 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employee;
+use App\Imports\DepartmentsImport;
+use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-
-class DashboardController extends Controller
+use Maatwebsite\Excel\Facades\Excel as FacadesExcel;
+class DepartmentsController extends Controller
 {
-
-    protected $employeesData = Employee::class;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(): View
+    public function index():View
     {
         //
-        $employees = Employee::paginate(10);
-        $totalEmployees = Employee::count();
+        $departments = Department::all();
+        return view('departments.index',['departments'=>$departments]);
+    }
 
-
-        //return $html;
-        return view('dashboard', [
-            'employees' => $employees,
-            'total_employees'=>$totalEmployees,
-            'headings' => array(
-                'name',
-                'contact',
-                'employee id',
-                'department',
-                'position',
-                'current salary',
-
-                // 'employment type',
-                // 'email', 'salary type',
-                // 'year joined',
-            )
-        ]);
+    public function importExcel(Request $request)
+    {
+        FacadesExcel::import(new DepartmentsImport, $request->file('file_upload'));
+        return back()->with('success', 'Import successful.');
     }
 
     /**

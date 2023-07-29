@@ -36,10 +36,10 @@
                         </select>
                         <button type="submit">Go</button>
                     </form>
-                    <a href="{{route('employees.payments.create')}}">
-                         <button class="block rounded p-2 bg-blue-600">
-                        create new
-                    </button>
+                    <a href="{{ route('employees.payments.create') }}">
+                        <button class="block rounded p-2 bg-blue-600">
+                            create new
+                        </button>
                     </a>
 
                 </div>
@@ -68,16 +68,18 @@
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap capitalize">{{ $payment->employee->name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap capitalize">
-                                    {{ $payment->net_pay }}</td>
+                                    ${{ number_format($payment->net_pay, 2) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap capitalize">
-                                    {{ $payment->status  }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap capitalize">
+                                    {{ $payment->status }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap capitalize flex gap-1">
                                     <a
                                         href="{{ route('employees.payment.view', ['id' => $payment->id]) }}"><button>view</button></a>
-                                    {{-- <form action="{{ route('change_payment_status', ['id' => $employee->id, 'month' => $selectedMonth]) }}" method="post">
-                        @csrf
-                        <button type="submit">Change Status</button>
-                    </form> --}}
+                                    <form
+                                        action="{{ route('employees.payment.status', ['id' => $payment->id, 'action' => 'paid', 'month' => $selectedMonth]) }}"
+                                        method="post">
+                                        @csrf
+                                        <button type="submit">Change Status</button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach

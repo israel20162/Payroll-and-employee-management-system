@@ -272,7 +272,7 @@ class EmployeeController extends Controller
         return view('employee.calender', ['events' => $events]);
     }
 
-    public function export()
+    public function exportEmployeesToExcel()
     {
         return FacadesExcel::download(new EmployeesExport, 'employees.xlsx');
     }

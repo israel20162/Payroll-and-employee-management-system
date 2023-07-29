@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateClientsTable extends Migration
+class CreateAttendanceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,13 @@ class CreateClientsTable extends Migration
      */
     public function up()
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('attendance', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreign('employee_id')->refrences('employee_id')->on('employees');
+            $table->time('check_in_time');
+            $table->time('check_out_time');
+            $table->date('date');
+            $table->integer('total_hours');
             $table->timestamps();
         });
     }
@@ -27,6 +31,6 @@ class CreateClientsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('attendance');
     }
 }

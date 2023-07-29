@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\EmployeesExport;
+use App\Exports\PaymentsExport;
 use App\Models\Employee;
 use App\Models\PaymentsHistory;
 use Dompdf\Adapter\PDFLib;
@@ -69,7 +70,7 @@ class PaymentsController extends Controller
         PaymentsHistory::create([
             'payment_date'=> date('Y-m-d'),
             'status'=>'UNPAID',
-            'amount'=>$employee_salary + $request->input('bonus') - (($request->input('tax')/100)*$employee_salary) ,
+            'amount'=>$employee_salary  ,
             'tax' =>$request->input('tax'),
             'deductions'=>number_format(($request->input('tax')/100)*$employee_salary),
             'bonus'=>$request->input('bonus'),
@@ -82,7 +83,7 @@ class PaymentsController extends Controller
         ]);
 
 
-         return redirect('/employees/payments')->with('success', 'Payslip generated successfully.');
+         return redirect(route('employees.payments'))->with('success', 'Payslip generated successfully.');
 
     }
     public function payHistory(Request $request)
@@ -92,6 +93,12 @@ class PaymentsController extends Controller
         $payments = PaymentsHistory::with('employee')->where('employee_id',$employee['0']['id'])->get();
 
         return view('employee.payments.history', ['payHistory' => $payments]);
+    }
+    public function setPaymentStatus(Request $request,$id,$action)
+    {
+      $payment = PaymentsHistory::where('id',$id)->update(['status'=>strtoupper($action)]);
+
+      return redirect()->back();
     }
     /**
      * Store a newly created resource in storage.
@@ -126,9 +133,9 @@ class PaymentsController extends Controller
         // download PDF file with download method
 
     }
-     public function export()
+     public function exportPaymentsToExcel(string $month,int $year)
     {
-        return FacadesExcel::download(new EmployeesExport, 'users.xlsx');
+        return FacadesExcel::download(new PaymentsExport($month,$year), 'payments_'.$month.'_'.date('Y').'.xlsx');
     }
     /**
      * Display a listing of the resource.

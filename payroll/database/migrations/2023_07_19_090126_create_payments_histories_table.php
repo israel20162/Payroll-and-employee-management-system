@@ -30,6 +30,7 @@ class CreatePaymentsHistoriesTable extends Migration
             // Define foreign key constraint for employee_id
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
+      
     }
 
     /**

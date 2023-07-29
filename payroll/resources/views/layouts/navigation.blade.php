@@ -19,6 +19,9 @@
                       <x-nav-link :href="route('employees')" :active="request()->routeIs('employees','employees.create')">
                         {{ __('Employees') }}
                     </x-nav-link>
+                     <x-nav-link :href="route('departments')" :active="request()->routeIs('departments','departments.create')">
+                        {{ __('Departments') }}
+                    </x-nav-link>
                      <x-nav-link :href="route('employees.payments')" :active="request()->routeIs('employees.payments')">
                         {{ __('Payments') }}
                     </x-nav-link>
