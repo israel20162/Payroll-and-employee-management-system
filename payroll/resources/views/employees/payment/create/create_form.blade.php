@@ -26,10 +26,12 @@
                     Create Employee Payslip
                 </h1>
 
-                <form action="{{route('employees.payment.store',['employee'=>$employee->id])}}" method="POST"
+                <form id="payslipForm" action={{ route('employees.payments.store', ['id' => $employee->id,'action'=>'generate']) }} method="post"
                     class="max-w-screen-lg grid group-hover:cursor-pointer capitalize grid-cols-2 gap-x-4  mx-auto"
-                    style="column-gap: 3rem" id="payslipForm">
+                    style="column-gap: 3rem" >
+
                     @csrf
+                    @method('POST')
                     <div class="mb-4">
                         <label for="name" class="block text-gray-700 text-sm font-bold mb-2 ">Employee Name:</label>
                         <input type="text" id='name' name="name"
@@ -37,16 +39,16 @@
                     </div>
                     <div class="mb-4">
                         <label for="salary" class="block text-gray-700 font-bold text-sm mb-2 ">Salary:</label>
-                        <input type="text" disabled id='salary' name="salary" class="w-full border rounded py-2 px-3"
-                            value="{{ ($employee->current_salary) }}">
+                        <input type="text" disabled id='salary' name="salary"
+                            class="w-full border rounded py-2 px-3" value="{{ $employee->current_salary }}">
                     </div>
                     <div class="mb-4">
                         <label for='department'class="block text-gray-700 text-sm font-bold mb-2 ">Department:</label>
-                        <input type="text" id='department' name='department'disabled
+                        <input type="text" id='department' name='department' disabled
                             class="w-full capitalize border rounded py-2 px-3" value="{{ $employee->department }}">
                     </div>
                     <div class="mb-4">
-                        <label for='department'class="block text-gray-700 text-sm font-bold mb-2 ">Position:</label>
+                        <label for='position'class="block text-gray-700 text-sm font-bold mb-2 ">Position:</label>
                         <input type="text" id='position' name='position' disabled
                             class="w-full capitalize border rounded py-2 px-3" value="{{ $employee->position }}">
                     </div>
@@ -65,7 +67,7 @@
                             (%)</label>
                         <input type="number" id="tax" name="tax"
                             class="w-full shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-md "
-                            step="any" value="0.00" min="100" maxlength="100" max="100">
+                            step="0.1" value="0.00" min="0" maxlength="100" max="100">
                     </div>
                     <div class="mb-4">
                         <label for='end_date'class="block text-gray-700 text-sm font-bold mb-2 ">Bonus Amount</label>
@@ -79,55 +81,56 @@
                             Generate Payslip
                         </button>
                     </div>
+
                 </form>
 
-                {{-- modal --}}
-                <div class="fixed z-10 inset-0 overflow-y-hidden hidden" id="modal">
-                    <div
-                        class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                            <div class="absolute inset-0 bg-gray-500 opacity-10" id="modal-bg" style="opacity: 50%">
-                            </div>
-                        </div>
-                        <div
-                            class="bg-white mx-auto mt-[25vh]  rounded-lg px-4 pt-5 pb-4 overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:p-6">
-                            <div>
-                                <div
-                                    class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
-                                    <svg class="h-6 w-6 text-green-600" xmlns='httpL//www.w3.org/2000/svg'
-                                        fill='none' viewBox='0 0 24 24 ' stroke='currentColor'
-                                        aria-hidden="true">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </div>
-                                <div class="mt-3 text-center sm:mt-5">
-                                    <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                        Payslip Calculated
-                                    </h3>
-                                    <div class="mt-2">
-                                        <p class="text-sm text-gray-500" id="modal-content">
-                                            The net pay is: <span id="netPay"></span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-5 sm:mt-6">
-                                <button type="button" id="generateButton"
-                                    class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-sm">
-                                    Generate Payslip
-                                </button>
-                            </div>
 
-                        </div>
-                    </div>
-                </div>
             </div>
 
 
 
+            {{-- modal --}}
+            <div class="fixed z-10 inset-0 overflow-y-hidden hidden" id="modal">
+                <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                        <div class="absolute inset-0 bg-gray-500 opacity-10" id="modal-bg" style="opacity: 50%">
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white mx-auto mt-[25vh]  rounded-lg px-4 pt-5 pb-4 overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:p-6">
+                        <div>
+                            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+                                <svg class="h-6 w-6 text-green-600" xmlns='httpL//www.w3.org/2000/svg' fill='none'
+                                    viewBox='0 0 24 24 ' stroke='currentColor' aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div class="mt-3 text-center sm:mt-5">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                    Payslip Calculated
+                                </h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-500" id="modal-content">
+                                        The net pay is: <span id="netPay"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-5 sm:mt-6">
+                            <button type="button" id="generateButton"
+                                class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-sm">
+                                Generate Payslip
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
         </x-slot>
         @push('scripts')
+
             <script>
                 document.getElementById('calculateButton').addEventListener('click', function() {
 
@@ -142,9 +145,11 @@
                     document.getElementById('modal').classList.remove('hidden');
                 });
 
-                document.getElementById('generateButton').addEventListener('click', function() {
+                document.getElementById('generateButton').addEventListener('click',function(){
                     document.getElementById('payslipForm').submit();
-                });
+                })
+
+
                 document.getElementById('modal-bg').addEventListener('click', function() {
                     document.getElementById('modal').classList.add('hidden');
                 })

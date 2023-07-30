@@ -26,24 +26,25 @@
                     Employee List
                 </h1>
                 <a href=""
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 ">Generate payslips
+                style="margin-bottom: 16px"
+                    class="bg-blue-500 m-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 ">Generate payslips
                     for all</a>
 
-                <table class='table-auto w-full bg-white'>
+                <table class='table-auto w-full bg-white mt-4'>
                     <thead>
                         <tr class="border-t rounded">
-                            <th class="px-4 py-2 capitalize">11</th>
-                            <th class="px-4 py-2 capitalize">1</th>
-                            <th class="px-4 py-2 capitalize">1</th>
+                            <th class="px-4 py-2 capitalize">Name</th>
+                            <th class="px-4 py-2 capitalize">Salary</th>
+                            {{-- <th class="px-4 py-2 capitalize">1</th> --}}
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($employees as $employee)
                             <tr>
                                 <td scope='col' class="border px-4 py-2">{{$employee->name}}</td>
-                                <td scope='col' class="border px-4 py-2">{{$employee->current_salary}}</td>
-                                <td scope='col' class="border px-4 py-2">{{$employee->name}}</td>
-                                <td scope='col' class="border"><a href="{{route('employees.payment.create',['id'=>$employee->id,'employee'=>$employee->name])}}">Generate Payslip</a></td>
+                                <td scope='col' class="border px-4 py-2">{{number_format($employee->current_salary,2)}}</td>
+                                {{-- <td scope='col' class="border px-4 py-2">{{$employee->name}}</td> --}}
+                                <td scope='col' class="border"><a class="m-1 px-4 py-2 text-sm text-white rounded text-center bg-green-500" href="{{route('employees.payment.create',['id'=>$employee->id,'employee'=>$employee->name])}}">Generate Payslip</a></td>
                             </tr>
                         @endforeach
                     </tbody>

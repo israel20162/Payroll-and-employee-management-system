@@ -166,7 +166,7 @@ class EmployeeController extends Controller
             'password' => $request->input('lastName')
         ]);
 
-        return redirect()->back()->with('success', 'created succesfully');
+        return redirect()->route('employees')->with('success', 'created succesfully');
 
 
 

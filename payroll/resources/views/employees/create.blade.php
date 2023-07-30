@@ -11,7 +11,7 @@
 
 
 
-        <form action={{route('employees.store')}} method="POST" class="mx-auto  w-3/4 mt-10    ">
+        <form action={{ route('employees.store') }} method="POST" class="mx-auto  w-3/4 mt-10    ">
             @csrf
 
             <div class="grid gap-6 mb-6 md:grid-cols-2">
@@ -45,15 +45,17 @@
                 </div>
                 <div>
                     <label for=""
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Position</label>
-
-                    <select id="" name='position' required
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"></label>
+                    <input type='text'
+                        class="bg-gray-50 border  cursor-pointer capitalize border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        name='position' />
+                    {{-- <select id="" name='position' required
                         class="bg-gray-50 border  cursor-pointer capitalize border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
                         @foreach ($positions as $position)
                             <option value={{ $position->id }}>{{ $position->name }}</option>
                         @endforeach
-                    </select>
+                    </select> --}}
 
 
                 </div>
@@ -111,7 +113,7 @@
                                 class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Female</label>
                         </div>
                         <div class="flex items-center pl-4 ">
-                            <input checked id="bordered-radio-2" type="radio"  value="other" name="gender"
+                            <input checked id="bordered-radio-2" type="radio" value="other" name="gender"
                                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <label for="bordered-radio-2"
                                 class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Other</label>
@@ -119,8 +121,9 @@
                     </div>
 
                 </div>
- <div class="mb-3">
-                    <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Year joined</label>
+                <div class="mb-3">
+                    <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Year
+                        joined</label>
                     <input type="text" name='year' id=""
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="" required>

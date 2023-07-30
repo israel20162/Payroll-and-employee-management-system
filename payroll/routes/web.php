@@ -60,13 +60,15 @@ Route::controller(PaymentsController::class)->group(function () {
     Route::get('/employee/payments/history/{id?}/pdf', 'generatePdf')->name('employee.pdf');
 
 
-    Route::get('/employees/payments', 'viewEmployeePayments')->name('employees.payments');
+    Route::any('/employees/payments', 'viewEmployeePayments')->name('employees.payments');
     Route::get('/employees/payments/{id?}', 'viewEmployeePayment')->name('employees.payment.view');
     Route::post('/employees/payments/{id?}/{action?}','setPaymentStatus')->name('employees.payment.status');
     Route::get('/employees/payment/create', 'createEmployeePayments')->name('employees.payments.create');
     Route::get('/export/payments/{month?}/{year?}', 'exportPaymentsToExcel');
     Route::get('/employees/payments/create/{employee?}', 'createEmployeePayment')->name('employees.payment.create');
-    Route::post('/employees/payments/generate-payslip/{employee?}', 'storeEmployeePayment')->name('employees.payment.store');
+    Route::post('/employees/payments/generate-payslip/{id}/{action?}','storeEmployeePayment')->name('employees.payments.store');
+    Route::post('/employees/payments/generate-payslips', 'storeAllEmployeePayments')->name('employees.payments.all.store');
+
 });
 
 // Route::get('/dashboard', function () {

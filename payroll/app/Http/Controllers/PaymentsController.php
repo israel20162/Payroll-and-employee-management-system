@@ -18,22 +18,23 @@ class PaymentsController extends Controller
     public function viewEmployeePayments(Request $request)
     {
         $selectedMonth = $request->input('month', date('m')); // Default to the current month
+        $selectedYear = $request->input('year',date('Y'));
         $month = date('F', mktime(0, 0, 0, $selectedMonth));
 
-        $employees = Employee::get();
-        $payments = PaymentsHistory::with('employee')->where('month', strtolower($month))->orWhere('month',$month)->get();
+        // $employees = Employee::get();
+        $payments = PaymentsHistory::with('employee')->where('year',$selectedYear)->where('month', strtolower($month))->get();
 
 
-        return view('employees.payment.payments', [ 'payments' => $payments, 'month' => $month,]);
+        return view('employees.payment.payments', ['payments' => $payments, 'month' => $month,'selectedYear' =>$selectedYear]);
     }
 
-    public function createEmployeePayments(Request $request )
+    public function createEmployeePayments(Request $request)
     {
         $selectedMonth = $request->input('month', date('m')); // Default to the current month
         $month = date('F', mktime(0, 0, 0, $selectedMonth));
 
-        $employees = Employee::whereDoesntHave('payments',function($query){
-            $query->where('month',date('F', mktime(0, 0, 0, date('m'))));
+        $employees = Employee::whereDoesntHave('payments', function ($query) {
+            $query->where('month', date('F', mktime(0, 0, 0, date('m'))));
         })->get();
 
 
@@ -46,59 +47,80 @@ class PaymentsController extends Controller
         $month = date('F', mktime(0, 0, 0, $selectedMonth));
 
         $employees = Employee::get();
-        $payment = PaymentsHistory::where('id',$id)->with('employee')->where('month', strtolower($month))->first();
+        $payment = PaymentsHistory::where('id', $id)->with('employee')->where('month', strtolower($month))->first();
 
 
-        return view('employees.payment.payment', [ 'payment' => $payment, 'month' => $month,]);
+        return view('employees.payment.payment', ['payment' => $payment, 'month' => $month,]);
     }
-    public function createEmployeePayment(Request $request,$employee)
+    public function createEmployeePayment(Request $request, $employee)
     {
-
-
         $employee = Employee::find($request->query('id'));
-
-
-
         return view('employees.payment.create.create_form', ['employee' => $employee]);
     }
-     public function storeEmployeePayment(Request $request,$employee)
+
+    public function storeEmployeePayment(Request $request, $employee)
     {
 
 
         $employee_salary = Employee::find($employee)->current_salary;
 
         PaymentsHistory::create([
-            'payment_date'=> date('Y-m-d'),
-            'status'=>'UNPAID',
-            'amount'=>$employee_salary  ,
-            'tax' =>$request->input('tax'),
-            'deductions'=>number_format(($request->input('tax')/100)*$employee_salary),
-            'bonus'=>$request->input('bonus'),
-            'employee_id'=>$employee,
-            'start_date'=> date('Y-m-01'),
-            'end_date'=> date('Y-m-t'),
-            'month'=> date('F', mktime(0, 0, 0, date('m'))),
-            'year'=>date('Y'),
-            'net_pay'=> $employee_salary + $request->input('bonus') - (($request->input('tax') / 100) * $employee_salary)
+            'payment_date' => date('Y-m-d'),
+            'status' => 'UNPAID',
+            'amount' => $employee_salary,
+            'tax' => $request->input('tax'),
+            'deductions' => number_format(($request->input('tax') / 100) * $employee_salary),
+            'bonus' => $request->input('bonus'),
+            'employee_id' => $employee,
+            'start_date' => date('Y-m-01'),
+            'end_date' => date('Y-m-t'),
+            'month' => date('F', mktime(0, 0, 0, date('m'))),
+            'year' => date('Y'),
+            'net_pay' => $employee_salary + $request->input('bonus') - (($request->input('tax') / 100) * $employee_salary)
         ]);
 
 
-         return redirect(route('employees.payments'))->with('success', 'Payslip generated successfully.');
+        return redirect()->route('employees.payments');
+
+    }
+    public function storeAllEmployeePayments(Request $request, $employee)
+    {
+
+
+        $employee_salary = Employee::find($employee)->current_salary;
+
+        PaymentsHistory::create([
+            'payment_date' => date('Y-m-d'),
+            'status' => 'UNPAID',
+            'amount' => $employee_salary,
+            'tax' => $request->input('tax'),
+            'deductions' => number_format(($request->input('tax') / 100) * $employee_salary),
+            'bonus' => $request->input('bonus'),
+            'employee_id' => $employee,
+            'start_date' => date('Y-m-01'),
+            'end_date' => date('Y-m-t'),
+            'month' => date('F', mktime(0, 0, 0, date('m'))),
+            'year' => date('Y'),
+            'net_pay' => $employee_salary + $request->input('bonus') - (($request->input('tax') / 100) * $employee_salary)
+        ]);
+
+
+        return redirect()->route('employees.payments');
 
     }
     public function payHistory(Request $request)
     {
-        $employee = Employee::where('employee_id',$request->query(('id')))->get()->toArray();
+        $employee = Employee::where('employee_id', $request->query(('id')))->get()->toArray();
 
-        $payments = PaymentsHistory::with('employee')->where('employee_id',$employee['0']['id'])->get();
+        $payments = PaymentsHistory::with('employee')->where('employee_id', $employee['0']['id'])->get();
 
         return view('employee.payments.history', ['payHistory' => $payments]);
     }
-    public function setPaymentStatus(Request $request,$id,$action)
+    public function setPaymentStatus(Request $request, $id, $action)
     {
-      $payment = PaymentsHistory::where('id',$id)->update(['status'=>strtoupper($action)]);
+        $payment = PaymentsHistory::where('id', $id)->update(['status' => strtoupper($action)]);
 
-      return redirect()->back();
+        return redirect()->back();
     }
     /**
      * Store a newly created resource in storage.
@@ -117,7 +139,7 @@ class PaymentsController extends Controller
      * @param \Barryvdh\DomPDF\Facade\Pdf $pdf
      *
      */
-    public function generatePdf(Request $request,$id)
+    public function generatePdf(Request $request, $id)
     {
         // retreive all records from db
         $data = PaymentsHistory::where('id', $id)->with(['employee'])->first()->toArray();
@@ -125,17 +147,17 @@ class PaymentsController extends Controller
         view()->share('employee.payments.history', $data);
 
 
-	        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('employee.payments.payslip_pdf', ['payment' => $data]); // @phpcs:ignore
-	        return $pdf->download($data['employee']['employee_id'].$data['month'].$data['year'].'.pdf');
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('employee.payments.payslip_pdf', ['payment' => $data]); // @phpcs:ignore
+        return $pdf->download($data['employee']['employee_id'] . $data['month'] . $data['year'] . '.pdf');
 
         // @phpstan-ignore-next-line // @phpcs:ignore
 
         // download PDF file with download method
 
     }
-     public function exportPaymentsToExcel(string $month,int $year)
+    public function exportPaymentsToExcel(string $month, int $year)
     {
-        return FacadesExcel::download(new PaymentsExport($month,$year), 'payments_'.$month.'_'.date('Y').'.xlsx');
+        return FacadesExcel::download(new PaymentsExport($month, $year), 'payments_' . $month . '_' . date('Y') . '.xlsx');
     }
     /**
      * Display a listing of the resource.
