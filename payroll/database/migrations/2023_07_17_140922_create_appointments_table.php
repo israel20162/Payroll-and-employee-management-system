@@ -13,15 +13,15 @@ class CreateAppointmentsTable extends Migration
      */
     public function up()
     {
-        // Schema::create('appointments', function (Blueprint $table) {
-        // //     $table->id();
-        // //     $table->datetime('start_time');
-        // //     $table->datetime('finish_time');
-        // //     $table->longText('comments')->nullable();
-        // //    $table->foreignId('client_id')->constrained();
-        // //     $table->foreignId('employee_id')->constrained();
-        // //    $table->timestamps();
-        // });
+        Schema::create('appointments', function (Blueprint $table) {
+            $table->id();
+            $table->datetime('start_time');
+            $table->datetime('finish_time');
+            $table->longText('comments')->nullable();
+           $table->foreignId('client_id')->constrained();
+            $table->foreignId('employee_id')->constrained();
+           $table->timestamps();
+        });
 
     }
 

@@ -59,7 +59,7 @@
                                 @endphp
 
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $payment['payment_date'] }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $payment['payment_date'] ? $payment['payment_date'] :'Unpaid' }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">${{ $payment['amount'] }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">%{{ $payment['tax'] }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">${{ $payment['bonus'] }}</td>

@@ -15,6 +15,7 @@
     <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core/main.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid/main.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid/main.css" rel="stylesheet" />
+   
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 
@@ -84,7 +85,8 @@
                 <nav class="flex-1 overflow-hidden hover:overflow-y-auto">
                     <ul class="p-2 overflow-hidden">
                         <li>
-                            <a href={{route('employee.dashboard',['id'=> session('user')->employee_id])}} class="flex items-center p-2 space-x-2 rounded-md hover:bg-gray-100"
+                            <a href={{ route('employee.dashboard', ['id' => session('user')->employee_id]) }}
+                                class="flex items-center p-2 space-x-2 rounded-md hover:bg-gray-100"
                                 :class="{ 'justify-center': !isSidebarOpen }">
                                 <span>
                                     <svg class="w-6 h-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -96,8 +98,9 @@
                                 <span :class="{ 'lg:hidden': !isSidebarOpen }">Dashboard</span>
                             </a>
                         </li>
-                                                <li>
-                            <a href={{route('employee.calender',['id'=> session('user')->employee_id])}} class="flex items-center p-2 space-x-2 rounded-md hover:bg-gray-100"
+                        <li>
+                            <a href={{ route('employee.calender', ['id' => session('user')->employee_id]) }}
+                                class="flex items-center p-2 space-x-2 rounded-md hover:bg-gray-100"
                                 :class="{ 'justify-center': !isSidebarOpen }">
                                 <span>
                                     <svg class="w-6 h-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -109,20 +112,86 @@
                                 <span :class="{ 'lg:hidden': !isSidebarOpen }">Calender</span>
                             </a>
                         </li>
-                             </li>
-                                                <li>
-                            <a href={{route('employee.payHistory',['id'=> session('user')->employee_id])}} class="flex items-center p-2 space-x-2 rounded-md hover:bg-gray-100"
+                        </li>
+                        <li>
+                            <a href={{ route('employee.payHistory', ['id' => session('user')->employee_id]) }}
+                                class="flex items-center p-2 space-x-2 rounded-md hover:bg-gray-100"
                                 :class="{ 'justify-center': !isSidebarOpen }">
                                 <span>
-                                    <svg class="w-6 h-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg class="w-6 h-6 text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                                     </svg>
                                 </span>
-                                <span :class="{ 'lg:hidden': !isSidebarOpen }">payslip</span>
+                                <span :class="{ 'lg:hidden': !isSidebarOpen }">Payments</span>
                             </a>
                         </li>
+                        <li>
+                            <a href={{ route('employee.tasks', ['id' => session('user')->employee_id]) }}
+                                class="flex items-center p-2 space-x-2 rounded-md hover:bg-gray-100"
+                                :class="{ 'justify-center': !isSidebarOpen }">
+                                <span>
+                                    <svg class="w-6 h-6 text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                    </svg>
+                                </span>
+                                <span :class="{ 'lg:hidden': !isSidebarOpen }">Tasks</span>
+                            </a>
+                        </li>
+
+                        {{-- <li>
+                            <a class="flex items-center p-2 space-x- rounded-md hover:bg-gray-100"
+                                :class="{ 'justify-center': !isSidebarOpen }">
+                                <svg class="w-6 h-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                </svg>
+                                <span class="relative  text-left w-full">
+                                    <button type="button"
+                                        class="flex justify-start  w-full rounded-md    px-2 py-2     focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                                        id="options-menu" aria-haspopup="true" aria-expanded="true">
+                                        Tasks
+                                        <!-- Heroicon name: solid/chevron-down -->
+                                        <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                    <div class="origin-top-right hidden absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100"
+                                        role="menu" aria-orientation="vertical" aria-labelledby="options-menu"
+                                        id="dropdown-content">
+
+                                            <a href={{ route('employee.tasks', ['id' => session('user')->employee_id]) }}
+                                                class="flex items-center p-2 space-x-2 rounded-md hover:bg-gray-100"
+                                                :class="{ 'justify-center': !isSidebarOpen }">
+                                                <span>
+                                                    <svg class="w-6 h-6 text-gray-400"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                                    </svg>
+                                                </span>
+                                                <span :class="{ 'lg:hidden': !isSidebarOpen }">Create</span>
+                                            </a>
+
+
+                                        <div class="py-1">
+                                            <a href=""
+                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                                                role="menuitem"></a>
+                                        </div>
+                                    </div>
+                                </span>
+                            </a>
+                        </li> --}}
                         <!-- Sidebar Links... -->
                     </ul>
                 </nav>
@@ -131,8 +200,8 @@
                     <button
                         class="flex items-center justify-center w-full px-4 py-2 space-x-1 font-medium tracking-wider uppercase bg-gray-100 border rounded-md focus:outline-none focus:ring toggleSidebar">
                         <span>
-                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
+                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                             </svg>
@@ -145,10 +214,11 @@
 
 
         <!-- Main content -->
-        <div class="flex-1">
+        <div class="flex-1 overflow-y-scroll max-h-screen">
             {{ $slot }}
         </div>
     </div>
+
 
     <!-- Toggle sidebar button -->
 
@@ -159,7 +229,10 @@
 
 
     @stack('scripts')
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
     <script src="{{ asset('js/app.js') }}"></script>
+
 </body>
 
 </html>

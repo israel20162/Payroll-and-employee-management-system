@@ -17,12 +17,11 @@ class CreatePaymentsHistoriesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('employee_id');
             $table->date('payment_date');
-            $table->decimal('amount', 10, 2);
-            $table->decimal('tax', 8, 2);
-            $table->decimal('bonus', 8, 2);
-            $table->decimal('net_pay',10,2);
-            $table->decimal('deductions',10,2)->default(0.00
-        );
+            $table->decimal('amount', 15, 2);
+            $table->decimal('tax', 12, 2);
+            $table->decimal('bonus', 12, 2);
+            $table->decimal('net_pay',12,2);
+            $table->decimal('deductions',12,2)->default(0.00);
             $table->enum('status',['PENDING','UNPAID','PAID']);
 
             $table->timestamps();

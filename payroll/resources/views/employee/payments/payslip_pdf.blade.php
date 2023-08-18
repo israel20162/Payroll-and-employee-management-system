@@ -63,11 +63,74 @@
         }
     </style>
 </head>
+<style>
+    .shadow {
+        --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    }
 
+    @media (min-width: 640px) {
+        .sm\:rounded-lg {
+            border-radius: 0.5rem
+                /* 8px */
+            ;
+        }
+    }
+
+    .text-lg {
+        font-size: 1.125rem
+            /* 18px */
+        ;
+        line-height: 1.75rem
+            /* 28px */
+        ;
+    }
+
+    ;
+
+    .gap-4 {
+        gap: 1rem
+            /* 16px */
+        ;
+    }
+
+    .pdf-container {
+        background-color: white;
+        overflow: hidden;
+    }
+
+    .pdf-header {
+        padding: 24px;
+        background-color: white;
+        border-bottom-width: 1px;
+    }
+
+    .pdf-header>.header {
+        font-weight: 600;
+        line-height: 2rem;
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem
+    }
+
+    .pdf-header>.period {
+        color: rgb(75 85 99 / var(1));
+    }
+
+    .pdf-info-container {
+        display: grid;
+        gap: 1rem;
+        text-transform: capitalize;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+</style>
 
 <body>
-    <div class="pdf-container">
-        <div class="pdf-header">
+    <div class="pdf-container" style="">
+        <div class="pdf-header"
+            style="padding: 24px;
+            background-color: white;
+            border-bottom-width: 1px;">
             <div style="display: flex; justify-content: space-between;">
                 <div>
                     <h2 class="header">Employee
@@ -127,7 +190,7 @@
                         $status = 'red';
                     }
                 @endphp
-                <h3  style="font-size: 1.125rem; line-height: 1.75rem;">Status
+                <h3 style="font-size: 1.125rem; line-height: 1.75rem;">Status
                 </h3>
                 <p style="color:{{ $status }}"><strong>{{ $payment['status'] }}</strong> </p>
 

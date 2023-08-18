@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+
+use Spatie\Permission\Traits\HasRoles;
 
 class Employee extends Authenticatable
 {
+    use Notifiable, HasRoles;
     /**
      * The primary key associated with the table.
      *
@@ -37,7 +39,7 @@ class Employee extends Authenticatable
         'contact',
         'employee_id',
         'salary_type',
-        
+
 
     ];
     public function position(): BelongsTo
@@ -50,8 +52,18 @@ class Employee extends Authenticatable
     }
     public function payments()
     {
-        return $this->hasMany(PaymentsHistory::class,'employee_id');
+        return $this->hasMany(PaymentsHistory::class, 'employee_id');
+    }
+    public function attendance()
+    {
+        return $this->hasMany(Attendance::class, 'employee_id');
+    }
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
     }
     use HasFactory;
+
+
     use Notifiable;
 }

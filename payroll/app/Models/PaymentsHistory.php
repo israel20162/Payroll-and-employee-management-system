@@ -26,7 +26,8 @@ class PaymentsHistory extends Model
         'end_date',
         'month',
         'year',
-        'net_pay'
+        'net_pay',
+        'generated_date'
     ];
     public function employee(): BelongsTo
     {

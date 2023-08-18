@@ -48,18 +48,12 @@
 
                         <select name="year" id="year" >
                             @for ($year = date('Y'); $year >= 2000; $year--)
-                                <option value="{{ $year }}" selected >
+                                <option value="{{ $year }}" @if ($selectedMonth == $year) selected @endif >
                                     {{ $year }}</option>
                             @endfor
                         </select>
 
-                        @push('scripts')
-                            <script>
-                               var year = document.getElementById('year')
-                                console.log(year.value)
 
-                            </script>
-                        @endpush
 
                         <button type="submit">Go</button>
                     </form>

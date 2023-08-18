@@ -17,8 +17,9 @@ class UpdatePaymentsHistoryTable extends Migration
         Schema::table('payments_history', function (Blueprint $table) {
             $table->string('month');
             $table->string('year');
-            $table->string('start_date');
+            $table->date('start_date')->nullable();
             $table->string('end_date');
+            $table->date('generated_date');
         });
     }
 

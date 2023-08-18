@@ -15,15 +15,17 @@ class CreateAttendanceTable extends Migration
     {
         Schema::create('attendance', function (Blueprint $table) {
             $table->id();
-            $table->foreign('employee_id')->references('employee_id')->on('employees');
+            $table->string('employee_id');
+
             $table->time('check_in_time');
             $table->time('check_out_time');
             $table->date('date');
             $table->integer('total_hours');
             $table->timestamps();
+            $table->foreign('employee_id')->references('employee_id')->on('employees');
         });
 
-        
+
     }
 
     /**

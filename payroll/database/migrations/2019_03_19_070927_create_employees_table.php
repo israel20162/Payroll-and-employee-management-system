@@ -27,8 +27,8 @@ class CreateEmployeesTable extends Migration
             $table->string('position_id');
             $table->integer('current_salary');
             $table->string('year_joined');
-             $table->string('image')->nullable();
-
+            $table->string('image')->nullable();
+            $table->string('gender');
 
 
             $table->timestamps();

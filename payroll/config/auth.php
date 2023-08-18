@@ -40,6 +40,16 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'api' => [
+            'driver' => 'token',
+            'provider' => 'users',
+            'hash' => false,
+        ],
+
+        'default' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
     ],
 
     /*

@@ -65,7 +65,7 @@ class PaymentsController extends Controller
         $employee_salary = Employee::find($employee)->current_salary;
 
         PaymentsHistory::create([
-            'payment_date' => date('Y-m-d'),
+            'generated_date' => date('Y-m-d'),
             'status' => 'UNPAID',
             'amount' => $employee_salary,
             'tax' => $request->input('tax'),
@@ -90,7 +90,7 @@ class PaymentsController extends Controller
         $employee_salary = Employee::find($employee)->current_salary;
 
         PaymentsHistory::create([
-            'payment_date' => date('Y-m-d'),
+            'generated_date' => date('Y-m-d'),
             'status' => 'UNPAID',
             'amount' => $employee_salary,
             'tax' => $request->input('tax'),
@@ -118,7 +118,7 @@ class PaymentsController extends Controller
     }
     public function setPaymentStatus(Request $request, $id, $action)
     {
-        $payment = PaymentsHistory::where('id', $id)->update(['status' => strtoupper($action)]);
+        $payment = PaymentsHistory::where('id', $id)->update(['status' => strtoupper($action),'payment_date'=>date('Y-m-d')]);
 
         return redirect()->back();
     }
@@ -148,7 +148,7 @@ class PaymentsController extends Controller
 
 
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('employee.payments.payslip_pdf', ['payment' => $data]); // @phpcs:ignore
-        return $pdf->download($data['employee']['employee_id'] . $data['month'] . $data['year'] . '.pdf');
+        return $pdf->download($data['employee']['employee_id'] . '_'. $data['month'] .'_' . $data['year'] . '.pdf');
 
         // @phpstan-ignore-next-line // @phpcs:ignore
 

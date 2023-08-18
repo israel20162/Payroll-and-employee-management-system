@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Exports\EmployeesExport;
 use App\Models\Appointment;
 use App\Models\Employee;
+// use App\Models\Role;
+use Spatie\Permission\Models\Permission;
 use App\Models\Position;
 use App\Models\Department;
 use App\Models\PaymentsHistory;
@@ -12,8 +14,12 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use App\Http\Controllers\AttendanceController;
+use App\Models\Attendance;
+use Carbon\Carbon;
 use Illuminate\View\View as ViewView;
 use Maatwebsite\Excel\Facades\Excel as FacadesExcel;
+use Spatie\Permission\Models\Role;
 
 class EmployeeController extends Controller
 {
@@ -25,12 +31,19 @@ class EmployeeController extends Controller
     public function index(): ViewView
     {
         $departments = Department::all();
+        $permissions = Permission::all();
+        $roles = Role::get();
+
+        // $roles = Role::with('employees')->get();
+
         $employees = Employee::paginate(10);
 
 
         return view('employees.index', [
             'departments' => $departments,
             'employees' => $employees,
+            'permissions' => $permissions,
+            'roles' => $roles,
             'headings' => array(
                 'name',
                 'contact',
@@ -163,13 +176,34 @@ class EmployeeController extends Controller
             'gender' => $request->input('gender'),
             'employee_id' => $employee_id,
             'year_joined' => $request->input('year'),
-            'password' => $request->input('lastName')
+            'password' => bcrypt($request->input('lastName'))
         ]);
 
         return redirect()->route('employees')->with('success', 'created succesfully');
 
 
 
+    }
+    public function assignRole(Request $request)
+    {
+        $employee = Employee::find($request->input('employee'));
+        $role = Role::find($request->input('role')); // Find the role with ID 4.
+
+        if (!$role) {
+            // The role does not exist. Handle this situation.
+            return back()->with('error', 'The role does not exist.');
+        }
+        // $role = $request->input('role');
+
+        if (!RoleController::assignRole($employee->id, $role->id)) {
+            return back()->with('failure', 'employee already has role');
+        } else {
+            RoleController::assignRole($employee->id, $role->id);
+        }
+
+
+
+        return back()->with('success', 'Role assigned successfully.');
     }
     /**
      * Employee Login
@@ -181,24 +215,39 @@ class EmployeeController extends Controller
     {
 
 
+        $attendance = new AttendanceController;
+
         $credentials = $request->validate([
             'employee_id' => 'required',
             'password' => 'required',
         ]);
         $employee = Employee::where('employee_id', $credentials['employee_id'])->first();
+        if ($employee) {
+            $last_name = explode(' ', $employee->name);
 
-        $last_name = explode(' ', $employee->name);
+            $permissions = $employee->getAllPermissions()->pluck('name');
 
-        if ($employee && $credentials['password'] === strtolower($last_name[0])) {
-            session(['user' => $employee]);
-            Auth::login($employee);
+            if ($employee && $credentials['password'] === strtolower($last_name[0])) {
+
+                $attendance->store($employee->employee_id);
+                session(['user' => $employee, 'logged_in' => true, 'check_in_time' => Carbon::now()->format('H:i:sa'), 'roles' => $employee->roles, 'permissions' => $permissions->all()]);
+                //   Auth::login($employee)
+                ;
 
 
-            return redirect(route('employee.dashboard', ['id' => $employee->employee_id])); // Change the redirect URL as per your requirement
+                return redirect(route('employee.dashboard', ['id' => $employee ? $employee->employee_id : '']));
+            } else {
+                return back()->withErrors([
+                    'credentials' => 'Employee ID or Password Incoreect',
+                ]);
+            }
+
+          
+            // Change the redirect URL as per your requirement
         }
-        return back()->withErrors([
-            'credentials' => 'Invalid login credentials.',
-        ]);
+         return back()->withErrors([
+                'credentials' => 'Invalid login credentials.',
+            ]);
     }
     /**
      * Display Employee login page.
@@ -211,16 +260,20 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Display Employee login page.
+     * Logout employee.
      *
      * @return \Illuminate\Http\Response
      * @return \Illuminate\Http\RedirectResponse;
      */
-    public function logout()
+    public function logout(Request $request)
     {
-        Auth::logout();
+        $employee_id = $request->query('id');
+        $attendance = new AttendanceController;
 
-        return redirect('/');
+        $attendance->update($employee_id);
+        Auth::logout();
+        session([ 'logged_in' => false]);
+        return redirect()->route('employee.loginForm');
     }
 
 
@@ -235,6 +288,9 @@ class EmployeeController extends Controller
     {
         $employee_id = $request->query('id');
         $employee = Employee::where('employee_id', $employee_id)->first();
+
+        $check_in_time = Carbon::createFromFormat('H:i:s', Attendance::where('employee_id', $employee->employee_id)->whereDate('date', date('Y-m-d'))->first()->check_in_time, );
+
         function getEmployeeEvents()
         {
             $events = [];
@@ -252,7 +308,7 @@ class EmployeeController extends Controller
         }
         ;
         //
-        return view('employee.dashboard', ['employee' => $employee, 'events' => getEmployeeEvents()]);
+        return view('employee.dashboard', ['employee' => $employee, 'events' => getEmployeeEvents(), 'check_in_time' => $check_in_time]);
     }
 
     public function calender()

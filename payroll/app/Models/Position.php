@@ -20,6 +20,7 @@ class Position extends Model
      protected $fillable = [
         'name',
         'fixed_salary',
+        'role_id'
     ];
 
      public function employees(): HasMany
